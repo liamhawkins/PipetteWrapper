@@ -1,7 +1,5 @@
-from opentrons import instruments, labware
+from functools import partial
 
-tiprack = labware.load('opentrons-tiprack-300ul', '1')
-pipette = instruments.P50_Multi('left', tip_racks=[tiprack])
 
 class TipTracker:
     def __init__(self, tiprack=None):
@@ -44,17 +42,23 @@ class TipTracker:
                     print("\nTaking {} tips".format(n))
                     return self.tiprack.wells(tip_name)
 
+
 class PipetteWrapper:
     def __init__(self, pipette):
         self.pipette = pipette
+        self.tip_racks = self.pipette.tip_racks
+        self.tiptracker = TipTracker(self.tip_racks[0])
 
     def __getattr__(self, name):
         if not callable(getattr(self.pipette, name)):
             return getattr(self.pipette, name)
         else:
             def method(*args, **kwargs):
+                if 'num_tips' in kwargs:
+                    num_tips = kwargs['num_tips']
+                else:
+                    num_tips = 8
+                location = self.tiptracker.next_tip(n=num_tips)
+                self.pipette.pick_up_tip = partial(self.pipette.pick_up_tip, location=location)
                 return getattr(self.pipette, name)(*args, **kwargs)
             return method
-
-pw = PipetteWrapper(pipette)
-print(pw.max_volume)
