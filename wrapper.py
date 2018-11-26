@@ -1,6 +1,10 @@
 from functools import partial
 
 
+class NoTipRackError(Exception):
+    pass
+
+
 class TipTracker:
     def __init__(self, tiprack=None):
         self.tiprack = tiprack
@@ -45,8 +49,13 @@ class TipTracker:
 
 class PipetteWrapper:
     def __init__(self, pipette):
+        if pipette.channels != 8:
+            raise ValueError('{} is not an 8-channel pipette'.format(pipette.name))
         self.pipette = pipette
+
         self.tip_racks = self.pipette.tip_racks
+        if not self.tip_racks:
+            raise NoTipRackError('Pipette object must be defined with tip_racks')
         self.tiptracker = TipTracker(self.tip_racks[0])
 
     def __getattr__(self, name):
