@@ -6,7 +6,7 @@ class NoTipRackError(Exception):
 
 
 class TipTracker:
-    def __init__(self, tiprack=None):
+    def __init__(self, tiprack):
         self.tiprack = tiprack
         self.letters = list(reversed(list('ABCDEFGH')))
         self.nums = list(range(1, 12 + 1))
