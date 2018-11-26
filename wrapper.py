@@ -98,11 +98,13 @@ class PipetteWrapper:
         self.tip_racks = self.pipette.tip_racks
         if not self.tip_racks:
             raise NoTipRackError('Pipette object must be defined with tip_racks')
+        if len(self.tip_racks) > 1:
+            raise NotImplementedError("Support for multiple tipracks has not been implemented")
         self.tiptracker = TipTracker(self.tip_racks[0])
 
     def __getattr__(self, name):
         """
-        Pass through calls for parameters and attributes from self.pipette object. If `name` is callable (method)
+        Pass through calls for methods and attributes from self.pipette object. If `name` is callable (method)
         monkey patch self.pipette.pick_up_tip with location defined by TipTracker object according to how many
         tips were requested by `num_tips` parameter. Any self.pipette method that uses `pick_up_tip` will be affected.
 
@@ -116,6 +118,8 @@ class PipetteWrapper:
         any
             Attribute from self.pipette or method with monkey patched self.pipette.pick_up_tip
         """
+        if name == 'return_tip':
+            raise NotImplementedError('Returning tip has not been implemented yet')
         if not callable(getattr(self.pipette, name)):
             # If not a method, pass attribute through
             return getattr(self.pipette, name)
