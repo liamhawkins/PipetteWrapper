@@ -21,7 +21,7 @@ class TipTracker:
                 col.append('{}{}'.format(l, n))
             self.rack.append(col)
 
-    def print_rack(self):
+    def __str__(self):
         for i in range(self.num_rows):
             row = []
             for col in self.rack:
