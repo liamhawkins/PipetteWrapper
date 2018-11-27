@@ -8,6 +8,8 @@ class NoTipRackError(Exception):
 class TipTracker:
     # TODO: Support multiple tip_racks
     # TODO: Support returning tips
+    # TODO: Validate that tiprack/source/destination slot is not going to cause collision
+    # TODO: Create automatic mode that would determine number of tips to use from source (?)
     """
     TipTracker tracks the tips used by an 8-channel pipette so it can be used as a single channel. TipTracker.next_tip()
     take n tips as an argument and return location of a tiprack that would result in the pipette picking up that many
@@ -76,11 +78,17 @@ class PipetteWrapper:
     PipetteWrapper is used to wrap opentrons multichannel Pipette objects to allow multichannels to act as single
     channels.
 
+    CURRENTLY REQUIRES A MODIFICATION TO LINE 67 IN opentrons/api/calibration.py:
+    CHANGE:
+    ``inst.pick_up_tip(container._container[0])``
+    TO:
+    ``inst.pick_up_tip(location=container._container[0])``
+
     Example
     -----
     ``from opentrons import labware, instruments``
 
-    ``tip_rack = labware.load('opentrons-tiprack-300ul', slot='1')``
+    ``tip_rack = labware.load('opentrons-tiprack-300ul', slot='4')``
 
     ``pipette = PipetteWrapper(instruments.P50_multi(mount='left', tip_racks=[tip_rack]))``
 
