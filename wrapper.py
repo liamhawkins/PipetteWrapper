@@ -94,7 +94,9 @@ class PipetteWrapper:
 
     ``plate = labware.load('96-flat')``
 
-    ``pipette.distribute(50, plate.wells('A1'), plate.wells('A2'), num_tips=4)``
+    ``pipette.distribute(50, plate.wells('A1'), plate.wells('A2'), num_tips=4)  # Uses 4 tips``
+
+    ``pipette.transfer(50, plate.wells('A1'), plate.wells('A2'))  # Defaults behaviour (8 tips)``
     """
     def __init__(self, pipette):
         # Check that pipette has 8-channels
@@ -115,6 +117,7 @@ class PipetteWrapper:
         Pass through calls for methods and attributes from self.pipette object. If `name` is callable (method)
         monkey patch self.pipette.pick_up_tip with location defined by TipTracker object according to how many
         tips were requested by `num_tips` parameter. Any self.pipette method that uses `pick_up_tip` will be affected.
+        Not passing num_tips results in default pipette behaviour (8 tips)
 
         Parameters
         ----------
@@ -137,7 +140,7 @@ class PipetteWrapper:
             def method(*args, **kwargs):
                 if 'num_tips' in kwargs:
                     num_tips = kwargs['num_tips']
-                    kwargs.pop('num_tips')
+                    kwargs.pop('num_tips')  # pop 'num_tips' so that pick_up_tips() can be used directly
                 else:
                     num_tips = 8
                 location = self.tiptracker.next_tip(n=num_tips)
