@@ -137,6 +137,7 @@ class PipetteWrapper:
             def method(*args, **kwargs):
                 if 'num_tips' in kwargs:
                     num_tips = kwargs['num_tips']
+                    kwargs.pop('num_tips')
                 else:
                     num_tips = 8
                 location = self.tiptracker.next_tip(n=num_tips)
