@@ -86,6 +86,8 @@ class PipetteWrapper:
 
     Example
     -----
+    ``from pipettewrapper import PipetteWrapper``
+
     ``from opentrons import labware, instruments``
 
     ``tip_rack = labware.load('opentrons-tiprack-300ul', slot='4')``
@@ -96,7 +98,7 @@ class PipetteWrapper:
 
     ``pipette.distribute(50, plate.wells('A1'), plate.wells('A2'), num_tips=4)  # Uses 4 tips``
 
-    ``pipette.transfer(50, plate.wells('A1'), plate.wells('A2'))  # Defaults behaviour (8 tips)``
+    ``pipette.transfer(50, plate.wells('A1'), plate.wells('A2'))  # Default behaviour (8 tips)``
     """
     def __init__(self, pipette):
         # Check that pipette has 8-channels
