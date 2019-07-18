@@ -140,11 +140,8 @@ class PipetteWrapper:
             # If a method is called, monkeypatch `pick_up_tip` with location that would pick up a specific number of
             # tips specified by num_tips kwarg
             def method(*args, **kwargs):
-                if 'num_tips' in kwargs:
-                    num_tips = kwargs['num_tips']
-                    kwargs.pop('num_tips')  # pop 'num_tips' so that pick_up_tips() can be used directly
-                else:
-                    num_tips = 8
+                # pop 'num_tips' so that pick_up_tips() can be used directly, if not specifiec used all 8 tips
+                num_tips = kwargs.pop('num_tips', 8)
                 location = self.tiptracker.next_tip(n=num_tips)
                 self.pipette.pick_up_tip = partial(self.pipette.pick_up_tip, location=location)
                 return getattr(self.pipette, name)(*args, **kwargs)
