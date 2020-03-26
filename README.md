@@ -1,6 +1,6 @@
 PipetteWrapper
 -----
-PipetteWrapper is used to wrap opentrons multichannel Pipette objects to allow multichannels to act as single channels.
+The Opentrons API only allowed for use of all 8 channels of the multichannel pipette attachments. PipetteWrapper is used to wrap opentrons multichannel Pipette objects to allow the use of any number of channels while automatically tracking tip usage.
 
 __CURRENTLY REQUIRES A MODIFICATION TO LINE 67 IN `opentrons/api/calibration.py`:__
 
