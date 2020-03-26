@@ -19,7 +19,7 @@ Installation
 
 Example
 -----
-```
+```python
 from pipettewrapper import PipetteWrapper
 from opentrons import labware, instruments
 
